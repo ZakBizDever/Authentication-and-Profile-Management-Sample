@@ -12,15 +12,26 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class RegistrationService
 {
     public function __construct(
-        private EntityManagerInterface $entityManager,
+        private EntityManagerInterface       $entityManager,
         private UserPasswordEncoderInterface $passwordEncoder,
-        private ValidatorInterface $validator,
-        private FileUploaderHelper $fileUploader
-    ) { }
+        private ValidatorInterface           $validator,
+        private FileUploaderHelper           $fileUploader
+    )
+    {
+    }
 
+    /**
+     * Prepare and Insert User data (registration)
+     *
+     * @param array $userData
+     * @param mixed $avatar
+     * @param array $photosData
+     * @return void
+     */
     public function registerUser(array $userData, mixed $avatar, array $photosData): void
     {
         $user = new User();
+
         $user->setFirstName($userData['firstName']);
         $user->setLastName($userData['lastName']);
         $user->setFullName($userData['firstName'] . ' ' . $userData['lastName']);

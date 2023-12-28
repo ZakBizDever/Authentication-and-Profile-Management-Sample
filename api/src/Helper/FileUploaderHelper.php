@@ -12,13 +12,19 @@ class FileUploaderHelper
     private $uploadStorage;
 
     public function __construct(
-        private S3Uploader $s3Uploader,
+        private S3Uploader            $s3Uploader,
         private ParameterBagInterface $parameterBag,
     )
     {
         $this->uploadStorage = $parameterBag->get('upload_storage');
     }
 
+    /**
+     * Upload user's avatar to specified storage
+     *
+     * @param UploadedFile|null $filePath
+     * @return string
+     */
     public function uploadAvatar(?UploadedFile &$filePath): string
     {
         if (!$filePath) return $filePath = $this->parameterBag->get('avatars_directory') . '/' . 'default_avatar.webp';
@@ -49,12 +55,19 @@ class FileUploaderHelper
             fclose($file);
             fclose($targetFile);
 
-            return $targetPath;
+            return $this->extractImagePath($targetPath);
         }
 
         return 'Error in storage config.';
     }
 
+    /**
+     * Upload user's photos to specified storage
+     *
+     * @param array $photos
+     * @param $user
+     * @return array
+     */
     public function uploadUserPhotos(array $photos, $user): array
     {
         $photoKeys = [];
@@ -89,7 +102,7 @@ class FileUploaderHelper
                     fclose($file);
                     fclose($targetFile);
 
-                    $photoKeys[] = $targetPath;
+                    $photoKeys[] = $this->extractImagePath($targetPath);
                 } elseif ($photoData instanceof UploadedFile) {
                     $photoFilename = md5(uniqid()) .
                         '-' .
@@ -102,12 +115,30 @@ class FileUploaderHelper
 
             $photo = new Photo();
             $photo->setName($photoFilename);
-            $photo->setUrl($photoUrl);
+            $photo->setUrl($this->extractImagePath($photoUrl));
             $photo->setStorage($uploadStorage);
 
             $user->addPhoto($photo);
         }
 
         return $photoKeys;
+    }
+
+    /**
+     * Trim and prepare upload path for client use
+     *
+     * @param $inputString
+     * @return mixed|string
+     */
+    private function extractImagePath($inputString): mixed
+    {
+        $position = strpos($inputString, '/uploads/');
+
+        if ($position !== false) {
+            $extractedPath = substr($inputString, $position);
+            return $extractedPath;
+        }
+
+        return $inputString;
     }
 }

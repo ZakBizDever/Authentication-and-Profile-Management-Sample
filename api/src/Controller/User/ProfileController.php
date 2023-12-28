@@ -20,28 +20,29 @@ class ProfileController extends AbstractController
 {
     public function __construct(
         private ProfileDetailsService $userProfileService,
-        private SerializerInterface $serializer
-    ) { }
+        private SerializerInterface   $serializer
+    )
+    {
+    }
 
     /**
      * @Route("/me", name="get_user_me", methods={"GET"})
      */
     public function userProfile(
-        Request $request,
+        Request                       $request,
         AuthorizationCheckerInterface $authorizationChecker
-    ): JsonResponse {
+    ): JsonResponse
+    {
         if (!$authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY')) {
             return new JsonResponse(["status" => "error", "message" => "User is not authenticated"],
                 Response::HTTP_UNAUTHORIZED
             );
         }
 
-        /** @var JWTUser $user **/
+        /** @var JWTUser $user * */
         $user = $this->getUser();
 
         $responseData = $this->userProfileService->getUserProfileData($user);
-
-        //$jsonContent = $this->serializer->serialize($responseData, 'json');
 
         return new JsonResponse([
             $responseData

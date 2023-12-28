@@ -7,6 +7,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 trait ValidationTrait
 {
+    /**
+     * Serialize validation violations
+     *
+     * @param ConstraintViolationListInterface $violations
+     * @return array
+     */
     public function serializeViolations(ConstraintViolationListInterface $violations): array
     {
         $serializedViolations = [];
@@ -18,11 +24,23 @@ trait ValidationTrait
         return $serializedViolations;
     }
 
+    /**
+     * Validate user data
+     *
+     * @param array $userData
+     * @param array $photosData
+     * @return array
+     */
     public function validateUserData(array $userData, array $photosData): array
     {
         $errors = [];
 
-        if (empty($userData['email']) || empty($userData['password']) || empty($userData['firstName']) || empty($userData['lastName'])) {
+        if (
+            empty($userData['email'])
+            || empty($userData['password'])
+            || empty($userData['firstName'])
+            || empty($userData['lastName'])
+        ) {
             $errors['overall'] = 'Invalid Data';
         }
 
@@ -50,6 +68,12 @@ trait ValidationTrait
         return $errors;
     }
 
+    /**
+     * Validate authentication input data
+     *
+     * @param array $data
+     * @return array
+     */
     protected function validateAuthenticationInput(array $data): array
     {
         $errors = [];

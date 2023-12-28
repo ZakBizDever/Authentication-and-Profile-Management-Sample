@@ -249,7 +249,6 @@ class User implements UserInterface
     }
 
 
-
     /**
      * Returns the salt that was originally used to encode the password.
      *

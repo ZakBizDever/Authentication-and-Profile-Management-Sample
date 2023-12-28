@@ -10,7 +10,7 @@ class FileFetcherHelper
     private $uploadStorage;
 
     public function __construct(
-        private S3Uploader $s3Uploader,
+        private S3Uploader            $s3Uploader,
         private ParameterBagInterface $parameterBag,
     )
     {
@@ -18,10 +18,11 @@ class FileFetcherHelper
     }
 
     /**
-     * Get photo URL(s) from AWS S3.
+     * Get photo(s) URL(s) from AWS S3 or Local storage.
      *
      * @param array|string $photoKey
      * @param $user
+     * @param string $storage
      * @return string|array|null
      */
     public function loadUserPhotos(array|string $photoKey, $user, $storage = 'local'): array|string|null

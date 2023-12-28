@@ -7,7 +7,12 @@ parameters:
     photos_directory: '%kernel.project_dir%/public/uploads/photos'
     avatars_directory: '%kernel.project_dir%/public/uploads/avatars'
     #Expects either 'local' or 'aws'
-    upload_storage: 'aws'
+    upload_storage: 'local'
+
+    #Newsletter config
+    newsletter.sender: 'newsletter@cobbleweb.com'
+    newsletter.subject: 'Your best newsletter'
+    newsletter.message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec id interdum nibh. Phasellus blandit tortor in cursus convallis. Praesent et tellus fermentum, pellentesque lectus at, tincidunt risus. Quisque in nisl malesuada, aliquet nibh at, molestie libero.'
 
 services:
     # default configuration for services in *this* file

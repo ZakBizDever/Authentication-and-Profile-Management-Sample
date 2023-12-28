@@ -24,19 +24,22 @@ class RegisterController extends AbstractController
     use ValidationTrait;
 
     public function __construct(
-        private EntityManagerInterface $entityManager,
+        private EntityManagerInterface       $entityManager,
         private UserPasswordEncoderInterface $passwordEncoder,
-        private ValidatorInterface $validator,
-        private FileUploaderHelper $fileUploader,
-        private RegistrationService $userRegistrationService
-    ) { }
+        private ValidatorInterface           $validator,
+        private FileUploaderHelper           $fileUploader,
+        private RegistrationService          $userRegistrationService
+    )
+    {
+    }
 
     /**
      * @Route("/register", name="register_users", methods={"POST"})
      */
     public function registerUser(
         Request $request
-    ): JsonResponse {
+    ): JsonResponse
+    {
         $userData = $request->request->all();
         $avatar = $request->files->get('avatar');
         $photosData = $request->files->get('photos', []);
@@ -45,9 +48,9 @@ class RegisterController extends AbstractController
 
         if (empty($errors)) {
             $this->userRegistrationService->registerUser($userData, $avatar, $photosData);
-            return $this->json(['status' => 'Success', 'message' => 'User registered successfully'], Response::HTTP_OK);
+            return $this->json(['success' => true, 'message' => 'User registered successfully'], Response::HTTP_OK);
         }
 
-        return $this->json(['status' => 'Failed', 'errors' => $errors], Response::HTTP_BAD_REQUEST);
+        return $this->json(['success' => false, 'errors' => $errors], Response::HTTP_BAD_REQUEST);
     }
 }

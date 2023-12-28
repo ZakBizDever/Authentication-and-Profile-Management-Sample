@@ -6,6 +6,7 @@ use App\Repository\UserRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
@@ -14,20 +15,20 @@ use App\Entity\User;
 
 class SendNewsletterCommand extends Command
 {
-    private $mailer;
-    private $entityManager;
-
-    private $userRepository;
-
-    public function __construct(MailerInterface $mailer, EntityManagerInterface $entityManager, UserRepository $userRepository)
+    public function __construct(
+        private MailerInterface $mailer,
+        private EntityManagerInterface $entityManager,
+        private UserRepository $userRepository,
+        private ParameterBagInterface $parameterBag)
     {
         parent::__construct();
-
-        $this->mailer = $mailer;
-        $this->entityManager = $entityManager;
-        $this->userRepository = $userRepository;
     }
 
+    /**
+     * Configure Command
+     *
+     * @return void
+     */
     protected function configure(): void
     {
         $this->setName('app:broadcast-newsletter')
@@ -35,6 +36,8 @@ class SendNewsletterCommand extends Command
     }
 
     /**
+     * Execute Send newsletter Command
+     *
      * @throws TransportExceptionInterface
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -53,15 +56,17 @@ class SendNewsletterCommand extends Command
     }
 
     /**
+     * Email sending logic
+     *
      * @throws TransportExceptionInterface
      */
     private function sendNewsletter($recipient): void
     {
         $email = (new Email())
-            ->from('newsletter@cobbleweb.com')
+            ->from($this->parameterBag->get('newsletter.sender'))
             ->to($recipient)
-            ->subject('Your best newsletter')
-            ->text('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec id interdum nibh. Phasellus blandit tortor in cursus convallis. Praesent et tellus fermentum, pellentesque lectus at, tincidunt risus. Quisque in nisl malesuada, aliquet nibh at, molestie libero.');
+            ->subject($this->parameterBag->get('newsletter.subject'))
+            ->text($this->parameterBag->get('newsletter.message'));
 
         $this->mailer->send($email);
     }

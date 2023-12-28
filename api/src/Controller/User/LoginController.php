@@ -20,11 +20,12 @@ class LoginController extends AbstractController
     use ValidationTrait;
 
     public function __construct(
-        private JWTTokenManagerInterface     $jwtManager,
-        private AuthenticationService $authenticationService,
-        private ValidatorInterface $validator
+        private JWTTokenManagerInterface $jwtManager,
+        private AuthenticationService    $authenticationService,
+        private ValidatorInterface       $validator
     )
-    { }
+    {
+    }
 
     /**
      * @Route("/login", name="login_user", methods={"POST"})

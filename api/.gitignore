@@ -1,0 +1,40 @@
+.env
+
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/public/uploads/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
+# PhpStorm directories
+.idea/
+.idea/workspace.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/dictionaries/
+
+# User-specific files
+.idea/.name
+.idea/.gitignore
+
+# PhpStorm metadata
+*.iml
+*.iws
+*.ipr
+
+# macOS metadata
+.DS_Store
+.AppleDouble
+.LSOverride
+
+#lexik JWT-authentication
+/config/secrets/jwt/*.pem
+
+###> symfony/web-server-bundle ###
+/.web-server-pid
+###< symfony/web-server-bundle ###

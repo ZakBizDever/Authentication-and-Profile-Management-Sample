@@ -216,4 +216,11 @@ Passwords are stored as hashed/encoded.
 - **The CobbleAuth API** returns appropriate HTTP status codes along with error messages in JSON format to help you identify and resolve any issues.
 - **The Cobble APP** handles HTTP status codes and other client-side errors.
 
+# Bonus: Animated Theme
+Uncomment following line to have animated theme.
+```bash
+//front/public/index.html:11
+<div class="background-shapes"></div>
+```
+
 

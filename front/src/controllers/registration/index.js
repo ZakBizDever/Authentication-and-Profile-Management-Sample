@@ -7,6 +7,7 @@ import FormTitle from "../../views/common/formTitle";
 import RegistrationModel from "../../models/registration";
 import ErrorRequest from "../../views/common/errorRequest";
 import { getFromLocalStorage } from "../../services/localeStorageUtils";
+import SuccessRegistration from "../../views/registration/successPage";
 
 const Registration = () => {
   const [errorRegister, setErrorRegister] = useState("");
@@ -37,11 +38,11 @@ const Registration = () => {
     };
 
     const resultRegistration = await RegistrationModel.registration(data);
-    if (resultRegistration) {
+    if (resultRegistration.data.success) {
       setErrorRegister("");
-      navigate("/login");
+      navigate("/success");
     }
-    setErrorRegister("Registration failed, try again");
+    setErrorRegister(resultRegistration.error);
   };
 
   const firstNameValidator = register("firstName", {

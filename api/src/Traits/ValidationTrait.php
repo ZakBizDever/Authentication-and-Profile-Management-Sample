@@ -35,13 +35,52 @@ trait ValidationTrait
     {
         $errors = [];
 
-        if (
-            empty($userData['email'])
-            || empty($userData['password'])
-            || empty($userData['firstName'])
-            || empty($userData['lastName'])
-        ) {
-            $errors['overall'] = 'Invalid Data';
+        if (empty($userData['email']) || empty($userData['password']) || empty($userData['firstName']) || empty($userData['lastName'])) {
+            $emptyFields = [];
+
+            if (empty($userData['email'])) {
+                $emptyFields[] = 'email';
+            }
+
+            if (empty($userData['password'])) {
+                $emptyFields[] = 'password';
+            }
+
+            if (empty($userData['firstName'])) {
+                $emptyFields[] = 'firstName';
+            }
+
+            if (empty($userData['lastName'])) {
+                $emptyFields[] = 'lastName';
+            }
+
+            $errors['overall'] = 'Invalid Data: Empty field(s): ' . implode(', ', $emptyFields);
+        }
+
+        $firstNameViolations = $this->validator->validate($userData['firstName'], [
+            new Assert\Length([
+                'min' => 2,
+                'max' => 25,
+                'minMessage' => 'First name should be at least {{ limit }} characters long.',
+                'maxMessage' => 'First name should be no longer than {{ limit }} characters.',
+            ])
+        ]);
+
+        $lastNameViolations = $this->validator->validate($userData['lastName'], [
+            new Assert\Length([
+                'min' => 2,
+                'max' => 25,
+                'minMessage' => 'Last name should be at least {{ limit }} characters long.',
+                'maxMessage' => 'Last name should be no longer than {{ limit }} characters.',
+            ])
+        ]);
+
+        if (count($firstNameViolations) > 0) {
+            $errors['First name'] = $this->serializeViolations($firstNameViolations);
+        }
+
+        if (count($lastNameViolations) > 0) {
+            $errors['Last name'] = $this->serializeViolations($firstNameViolations);
         }
 
         $passwordViolations = $this->validator->validate($userData['password'], [

@@ -27,7 +27,7 @@ const registerRequest = async (data) => {
     });
     return response;
   } catch (error) {
-    return { status: "error", message: error.message };
+    return error.response.data;
   }
 };
 

@@ -1,0 +1,92 @@
+body {
+  background-image: linear-gradient(
+    to bottom right,
+    #01adeb,
+    #31d1b6
+  ) !important;
+  width: 100% !important;
+  height: 100vh !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  position: relative !important;
+  overflow: hidden !important;
+  background-size: cover !important;
+  color: white !important;
+  font-family: sans-serif !important;
+  font-weight: 200 !important;
+  z-index: 1 !important;
+}
+#body-container {
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  z-index: 2;
+}
+
+.background-shapes {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 5076px;
+  background-size: 100%;
+  animation: 120s infiniteScroll linear infinite;
+  background-repeat: repeat;
+  background-image: url(https://cdn2.hubspot.net/hubfs/53/Pricing%202017%20Assets/marketing/Header_Circles-1.svg);
+}
+
+@-webkit-keyframes infiniteScroll {
+  0% {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+
+  100% {
+    -webkit-transform: translate3d(0, -1692px, 0);
+    transform: translate3d(0, -1692px, 0);
+  }
+}
+
+@keyframes infiniteScroll {
+  0% {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+
+  100% {
+    -webkit-transform: translate3d(0, -1692px, 0);
+    transform: translate3d(0, -1692px, 0);
+  }
+}
+
+@-webkit-keyframes AnimationName {
+  0% {
+    background-position: 0% 69%;
+  }
+  50% {
+    background-position: 100% 32%;
+  }
+  100% {
+    background-position: 0% 69%;
+  }
+}
+@keyframes AnimationName {
+  0% {
+    background-position: 0% 69%;
+  }
+  50% {
+    background-position: 100% 32%;
+  }
+  100% {
+    background-position: 0% 69%;
+  }
+}
+
+.slick-prev::before,
+.slick-next::before {
+  color: #5bbfc6 !important;
+}

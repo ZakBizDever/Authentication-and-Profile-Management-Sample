@@ -42,7 +42,7 @@ const Registration = () => {
       setErrorRegister("");
       navigate("/success");
     }
-    setErrorRegister(resultRegistration.error);
+    setErrorRegister(resultRegistration.data.error);
   };
 
   const firstNameValidator = register("firstName", {

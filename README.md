@@ -155,9 +155,9 @@ Composed from ``Symfony 4.4 API`` and ``React 18 APP``.
 ## APP Routes
 
 #### 0. Default: redirects /login
-#### 1. Login: /login
-#### 2. Registration: /register
-#### 3. Profile details: /profile
+#### 1. Login: ```/login```
+#### 2. Registration: ```/register```
+#### 3. Profile details: ```/profile```
 #### X. Not found: redirects to 404
 
 ## Bundels
@@ -171,7 +171,7 @@ Composed from ``Symfony 4.4 API`` and ``React 18 APP``.
 - ...
 
 ### React APP
-- React 18 (leatest at the time)
+- React 18 (latest at the current time)
 - react-router-dom : routing.
 - react-hook-form : form validation.
 - Chakra UI : Material design.
@@ -207,6 +207,7 @@ Authentication is required via JWT Token for accessing endpoints other than /reg
 ## Security
 
 Security is handled including SQL Injection attempts.
+
 Passwords are stored as hashed/encoded.
 
 ## Validations & Error Handling 

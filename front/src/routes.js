@@ -5,6 +5,7 @@ import LoginPage from "./pages/login";
 import RegistrationPage from "./pages/regsitration";
 import ProfilePage from "./pages/profile";
 import NotFoundPage from "./pages/404";
+import SuccessRegistration from "./views/registration/successPage";
 
 const MainRoutes = () => {
   return (
@@ -13,6 +14,7 @@ const MainRoutes = () => {
       <Route exact path="/login" element={<LoginPage />} />
       <Route exact path="/register" element={<RegistrationPage />} />
       <Route exact path="/profile" element={<ProfilePage />} />
+      <Route exact path="/success" element={<SuccessRegistration />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );

@@ -47,10 +47,15 @@ class RegisterController extends AbstractController
         $errors = $this->validateUserData($userData, $photosData);
 
         if (empty($errors)) {
-            $this->userRegistrationService->registerUser($userData, $avatar, $photosData);
-            return $this->json(['success' => true, 'message' => 'User registered successfully'], Response::HTTP_OK);
+            $registred = $this->userRegistrationService->registerUser($userData, $avatar, $photosData);
+            if ($registred === true) {
+                return $this->json(['success' => true, 'message' => 'User registered successfully'], Response::HTTP_OK);
+            } else {
+                return $this->json(['success' => false, 'error' => $registred['error']], Response::HTTP_CONFLICT);
+            }
+
         }
 
-        return $this->json(['success' => false, 'errors' => $errors], Response::HTTP_BAD_REQUEST);
+        return $this->json(['success' => false, 'error' => $errors], Response::HTTP_BAD_REQUEST);
     }
 }

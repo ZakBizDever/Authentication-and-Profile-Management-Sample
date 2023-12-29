@@ -35,74 +35,11 @@ trait ValidationTrait
     {
         $errors = [];
 
-        if (empty($userData['email']) || empty($userData['password']) || empty($userData['firstName']) || empty($userData['lastName'])) {
-            $emptyFields = [];
+        $this->validateRegistrationInput($userData, $errors);
 
-            if (empty($userData['email'])) {
-                $emptyFields[] = 'email';
-            }
+        $this->validatePassword($userData['password'], $errors);
 
-            if (empty($userData['password'])) {
-                $emptyFields[] = 'password';
-            }
-
-            if (empty($userData['firstName'])) {
-                $emptyFields[] = 'firstName';
-            }
-
-            if (empty($userData['lastName'])) {
-                $emptyFields[] = 'lastName';
-            }
-
-            $errors['overall'] = 'Invalid Data: Empty field(s): ' . implode(', ', $emptyFields);
-        }
-
-        $firstNameViolations = $this->validator->validate($userData['firstName'], [
-            new Assert\Length([
-                'min' => 2,
-                'max' => 25,
-                'minMessage' => 'First name should be at least {{ limit }} characters long.',
-                'maxMessage' => 'First name should be no longer than {{ limit }} characters.',
-            ])
-        ]);
-
-        $lastNameViolations = $this->validator->validate($userData['lastName'], [
-            new Assert\Length([
-                'min' => 2,
-                'max' => 25,
-                'minMessage' => 'Last name should be at least {{ limit }} characters long.',
-                'maxMessage' => 'Last name should be no longer than {{ limit }} characters.',
-            ])
-        ]);
-
-        if (count($firstNameViolations) > 0) {
-            $errors['First name'] = $this->serializeViolations($firstNameViolations);
-        }
-
-        if (count($lastNameViolations) > 0) {
-            $errors['Last name'] = $this->serializeViolations($firstNameViolations);
-        }
-
-        $passwordViolations = $this->validator->validate($userData['password'], [
-            new Assert\Length([
-                'min' => 6,
-                'max' => 50,
-                'minMessage' => 'Your password should be at least {{ limit }} characters long.',
-                'maxMessage' => 'Your password should be no longer than {{ limit }} characters.',
-            ]),
-            new Assert\Regex([
-                'pattern' => '/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{2,}$/',
-                'message' => 'Password must contain at least one letter and one digit.',
-            ]),
-        ]);
-
-        if (count($passwordViolations) > 0) {
-            $errors['password'] = $this->serializeViolations($passwordViolations);
-        }
-
-        if (empty($photosData) || count($photosData) < 4) {
-            $errors['photos'] = 'At least 4 photos should be uploaded';
-        }
+        $this->validatePhoto($photosData, $errors);
 
         return $errors;
     }
@@ -129,5 +66,132 @@ trait ValidationTrait
         }
 
         return $errors;
+    }
+
+    /**
+     * Registration form inputs validation
+     *
+     * @param $userData
+     * @param $errors
+     * @return void
+     */
+    private function validateRegistrationInput($userData, &$errors): void
+    {
+        $this->validateEmail($userData['email'], 'Email', $errors);
+
+        $this->validateFieldLength($userData['firstName'], 'First name', 2, 25, $errors);
+
+        $this->validateFieldLength($userData['lastName'], 'Last name', 2, 25, $errors);
+
+        $emptyFields = array_filter(['email', 'password', 'firstName', 'lastName'], function ($field) use ($userData) {
+            return empty($userData[$field]);
+        });
+
+        if (!empty($emptyFields)) {
+            $errors['overall'] = 'Invalid Data: Empty field(s): ' . implode(', ', $emptyFields);
+        }
+    }
+
+    /**
+     *Validate provided field's Lenght against requirements
+     *
+     * @param $value
+     * @param $fieldName
+     * @param $min
+     * @param $max
+     * @param $errors
+     * @return void
+     */
+    private function validateFieldLength($value, $fieldName, $min, $max, &$errors): void
+    {
+        $violations = $this->validator->validate($value, [
+            new Assert\Length([
+                'min' => $min,
+                'max' => $max,
+                'minMessage' => "$fieldName should be at least {{ limit }} characters long.",
+                'maxMessage' => "$fieldName should be no longer than {{ limit }} characters.",
+            ]),
+        ]);
+
+        if ($violations->count() > 0) {
+            $errors[$fieldName] = $this->serializeViolations($violations);
+        }
+    }
+
+    /**
+     * Validate email structure
+     *
+     * @param $email
+     * @param $fieldName
+     * @param $errors
+     * @return void
+     */
+    private function validateEmail($email, $fieldName, &$errors): void
+    {
+        $violations = $this->validator->validate($email, [
+            new Assert\Email([
+                'message' => "$fieldName is not a valid email address.",
+            ]),
+        ]);
+
+        if ($violations->count() > 0) {
+            $errors[$fieldName] = $this->serializeViolations($violations);
+        }
+    }
+
+    /**
+     * Validate password against requirements and complexity check
+     *
+     * @param $password
+     * @param $errors
+     * @return void
+     */
+    private function validatePassword($password, &$errors): void
+    {
+        $passwordViolations = $this->validator->validate($password, [
+            new Assert\Length([
+                'min' => 6,
+                'max' => 50,
+                'minMessage' => 'Your password should be at least {{ limit }} characters long.',
+                'maxMessage' => 'Your password should be no longer than {{ limit }} characters.',
+            ]),
+            new Assert\Regex([
+                'pattern' => '/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{2,}$/',
+                'message' => 'Password must contain at least one letter and one digit.',
+            ]),
+        ]);
+
+        if (count($passwordViolations) > 0) {
+            $errors['password'] = $this->serializeViolations($passwordViolations);
+        }
+    }
+
+    /**
+     * Validate uploaded file type against image file possible extensions
+     *
+     * @param $photosData
+     * @param $errors
+     * @return void
+     */
+    private function validatePhoto($photosData, &$errors): void
+    {
+        foreach ($photosData as $index => $photo) {
+            $photoViolations = $this->validator->validate($photo, [
+                new Assert\File([
+                    'mimeTypes' => ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
+                    'mimeTypesMessage' => 'Only JPEG, PNG, GIF, and WebP image types are allowed.',
+                    'notFoundMessage' => 'File not found.',
+                    'disallowEmptyMessage' => 'File should not be empty.',
+                ]),
+            ]);
+
+            if (count($photoViolations) > 0) {
+                $errors["photo{$index}"] = $this->serializeViolations($photoViolations);
+            }
+        }
+
+        if (empty($photosData) || count($photosData) < 4) {
+            $errors['photos'] = 'At least 4 photos should be uploaded';
+        }
     }
 }

@@ -12,12 +12,8 @@ const registration = async (data) => {
     formData.append("photos[]", photos[i]);
   }
   const result = await ApiService.registration(formData);
-  if (result.status === "error") {
-    console.log("ERROR REGISTER Request", result.message);
-    return false;
-  }
-  const { success } = result.data;
-  return success;
+
+  return result;
 };
 
 const RegistrationModel = { registration };

@@ -20,7 +20,7 @@ Composed from ``Symfony 4.4 API`` and ``React 18 APP``.
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/ZakBizDever/CobblewebAuth.git
+    git clone https://github.com/ZakBizDever/Authentication-and-Profile-Management-Sample.git
     ```
 
 2. Install dependencies:

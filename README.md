@@ -1,7 +1,7 @@
-# CobblewebAuth
+# 
 
 ## Description
-CobbleAuth is an interface to register, authenticate users and display profiles.
+APM is an interface to register, authenticate users and display profiles.
 
 Composed from ``Symfony 4.4 API`` and ``React 18 APP``.
 

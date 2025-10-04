@@ -192,7 +192,7 @@ php bin/console app:broadcast-newsletter
 **N.B:** Check config. files to personalise sender, subject and message.
 
 ## File upload Storage
-The CobbleAuth app supports 2 distinct types of storage, Local and AWS S3.
+The APM Auth app supports 2 distinct types of storage, Local and AWS S3.
 In order to switch between storage type, following param is at your service:
 ```bash
 // ./api/config/services.yaml
@@ -213,8 +213,8 @@ Passwords are stored as hashed/encoded.
 ## Validations & Error Handling 
 
 - **Inputs:** Fields validation is handled on both Client and API sides, and returns/displays appropriate errors.
-- **The CobbleAuth API** returns appropriate HTTP status codes along with error messages in JSON format to help you identify and resolve any issues.
-- **The Cobble APP** handles HTTP status codes and other client-side errors.
+- **The APM Auth API** returns appropriate HTTP status codes along with error messages in JSON format to help you identify and resolve any issues.
+- **The APM APP** handles HTTP status codes and other client-side errors.
 
 # Bonus: Animated Theme
 Uncomment following line to have animated theme.
